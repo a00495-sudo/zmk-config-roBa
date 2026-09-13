@@ -96,7 +96,7 @@
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        // NOTE: On the live device this layer no longer holds F-+eys (those moved
+        // NOTE: On the live device this layer no longer holds F-keys (those moved
         // to layer "NUM" below). It now holds the number row, bracket/backslash/
         // quote/semicolon symbols, a few arrow keys, and Esc. Several of the
         // symbol keys below (', ;, {, }, \, `) use the plain/unshifted US keycode;
