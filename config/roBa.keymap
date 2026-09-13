@@ -9,7 +9,11 @@
 };
 
 &trackball {
-    automouse-layer = <4>;
+    // automouse-layer disabled (2026-09-13): moving the ball no longer
+    // auto-switches into the MOUSE layer. The MOUSE layer definition itself
+    // is left in place below (currently unreachable) in case it's wanted
+    // again later.
+    // automouse-layer = <4>;
     scroll-layers = <5>;
 
     // arrows {
@@ -145,8 +149,9 @@
         // NOTE: The original MB1/MB2/MB3 click bindings that used to live here
         // are gone; MB1 (left click) now lives directly on default_layer instead.
         // Only a stray Ctrl+A / Ctrl+E pair remain (mirroring the ARROW layer).
-        // automouse-layer = <4> on &trackball still auto-activates this layer
-        // when the ball moves, but almost everything on it is currently &trans.
+        // automouse-layer on &trackball was disabled (2026-09-13), so moving
+        // the ball no longer auto-activates this layer; it is currently
+        // unreachable (like ARROW) unless something is later wired to &mo 4.
         MOUSE {
             bindings = <
 &trans  &trans  &trans     &trans  &trans                      &trans  &kp LC(A)  &trans  &kp LC(E)  &trans
