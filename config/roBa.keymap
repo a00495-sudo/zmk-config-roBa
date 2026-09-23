@@ -84,35 +84,47 @@
         compatible = "zmk,keymap";
 
         // NOTE: This layer reflects the CURRENT on-device state as read directly
-        // from ZMK Studio on 2026-09-13. It has diverged substantially from the
-        // original kumamuk-git/zmk-config-roBa template because of live edits
-        // made in ZMK Studio (which only patches flashed keycodes and cannot be
-        // seen from GitHub). Some behaviors that used to be hold-taps / layer-taps
-        // (e.g. "I", "Z", "SPACE") have been simplified to plain key presses.
+        // from ZMK Studio on 2026-09-23 (third sync pass). Compared to the
+        // previous sync: row3 left-6th/right-6th gained LeftShift/RightShift
+        // (was transparent), row2 right-end became RETURN (was DEL), and the
+        // thumb row was reorganized: left thumb is now Alt, LeftGUI, &mo1,
+        // GUI+LeftControl (verified via ZMK Studio's modifier picker - this is
+        // a real GUI+Ctrl combo, not a plain Ctrl), Space, Delete-Forward;
+        // right thumb is now Backspace, LeftControl, &mo6. Some behaviors that
+        // used to be hold-taps / layer-taps (e.g. "I", "Z", "SPACE") have been
+        // simplified to plain key presses in earlier syncs.
         default_layer {
             bindings = <
 &kp Q         &kp W         &kp E     &kp R    &kp T                          &kp Y         &kp U    &kp I    &kp O    &kp P
-&kp A         &kp S         &kp D     &kp F    &kp G        &mkp MB1                &kp LS(SLASH)  &kp H    &kp J    &kp K    &kp L    &kp DEL
-&kp Z         &kp X         &kp C     &kp V    &kp B        &trans                  &kp TAB        &kp N    &kp M    &kp COMMA &kp DOT &kp RETURN
-&kp LEFT_ALT  &kp LEFT_WIN  &kp LCTRL &mo 1    &kp SPACE    &kp LEFT_SHIFT          &kp LEFT_SHIFT &kp LCTRL                            &mo 6
+&kp A         &kp S         &kp D     &kp F    &kp G        &mkp MB1                &kp LS(SLASH)  &kp H    &kp J    &kp K    &kp L    &kp RETURN
+&kp Z         &kp X         &kp C     &kp V    &kp B        &kp LEFT_SHIFT          &kp RIGHT_SHIFT &kp N    &kp M    &kp COMMA &kp DOT &kp RETURN
+&kp LEFT_ALT  &kp LEFT_GUI  &mo 1    &kp LG(LCTRL)  &kp SPACE    &kp DEL          &kp BACKSPACE &kp LCTRL                            &mo 6
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        // NOTE: This layer was reworked again on the live device (2026-09-13,
-        // second pass). Left row2/row3 and the whole right hand (rows 1-3) were
-        // changed from the previous sync. The former left-row2/row3 floating
-        // keys (Shift+5, transparent) were then further replaced with mouse
-        // scroll up/down. Symbol keys below (', ;, {, }, \, `, _) use the
-        // plain/unshifted US keycode or ZMK's pre-shifted alias (LEFT_BRACE,
-        // RIGHT_BRACE); JIS-layout correctness has not been re-verified.
+        // NOTE: This layer was reworked again on the live device (2026-09-23,
+        // third pass). Nearly every key on row2-right ('{' and '-') and all of
+        // row3 (both hands: the symbol/bracket/backslash/Home keys on the left
+        // and RightShift/'-' on the right) now carry an extra Left-GUI (Windows)
+        // modifier stacked on top of their existing Shift/plain binding - e.g.
+        // '{' is GUI+Shift+LeftBrace (not just Shift+LeftBrace), RightShift is
+        // GUI+RightShift, Home is GUI+Home. This was verified key-by-key via
+        // ZMK Studio's modifier-button row, which is easy to miss since the key
+        // face only shows the base symbol. The thumb row's F5 and F12 also
+        // gained GUI (GUI+F5, GUI+F12), and the thumb-row physical order was
+        // corrected (transparent/F12 were previously swapped in this file) with
+        // the middle-right thumb key now End (was Escape). Row1 right-end is
+        // TAB (was transparent) and row2 right-end is RETURN (was DEL). Symbol
+        // keys use the plain/unshifted US keycode or ZMK's pre-shifted alias;
+        // JIS-layout correctness has not been re-verified.
         FUNCTION {
             bindings = <
-&kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4     &kp NUMBER_5                            &kp LS(APOSTROPHE)  &kp SEMICOLON  &kp UP_ARROW    &kp BACKSLASH  &trans
-&kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9     &kp NUMBER_0  &msc SCRL_UP                    &kp LEFT_BRACE      &kp MINUS      &kp LEFT_ARROW  &kp DOWN_ARROW &kp RIGHT_ARROW &kp DEL
-&kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp RIGHT_BRACE  &kp BACKSLASH  &kp LS(GRAVE)  &msc SCRL_DOWN         &kp SLASH           &kp LS(MINUS)  &mkp MB1        &mkp MB2       &trans          &trans
-&kp F3        &kp F5        &kp F12       &trans           &kp ESCAPE    &trans                          &kp LEFT_SHIFT      &kp GRAVE                                                     &trans
+&kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4     &kp NUMBER_5                            &kp LS(APOSTROPHE)  &kp SEMICOLON  &kp UP_ARROW    &kp BACKSLASH  &kp TAB
+&kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9     &kp NUMBER_0  &msc SCRL_UP                    &kp LG(LS(LEFT_BRACE))  &kp LG(MINUS)  &kp LEFT_ARROW  &kp DOWN_ARROW &kp RIGHT_ARROW &kp RETURN
+&kp LG(LS(NUMBER_8))  &kp LG(LS(NUMBER_9))  &kp LG(RIGHT_BRACE)  &kp LG(BACKSLASH)  &kp LG(HOME)  &msc SCRL_DOWN         &kp LG(RIGHT_SHIFT)  &kp LG(LS(MINUS))  &mkp MB1        &mkp MB2       &trans          &trans
+&kp F3        &kp LG(F5)    &trans           &kp LG(F12)    &kp END    &trans                          &kp LEFT_SHIFT      &kp GRAVE                                                     &trans
             >;
         };
 
@@ -187,3 +199,4 @@
         };
     };
 };
+
