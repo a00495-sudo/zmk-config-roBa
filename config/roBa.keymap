@@ -38,7 +38,6 @@
             bindings = <&kp TAB>;
             key-positions = <11 12>;
         };
-
         shift_tab {
             bindings = <&kp LS(TAB)>;
             key-positions = <12 13>;
@@ -67,6 +66,19 @@
             bindings = <&to 0 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
             label = "TO_LAYER_0";
         };
+
+        // Added 2026-09-23: &bt takes more than one parameter (the action
+        // plus a profile index), so per ZMK docs it cannot be referenced
+        // directly inside a hold-tap's "bindings" list - it must be wrapped
+        // in a zero-parameter macro first. This macro just fires
+        // "&bt BT_CLR_ALL" (clear ALL 5 Bluetooth profile bonds) and is used
+        // as the hold-side of bt_reset_hold below.
+        bt_reset_all: bt_reset_all {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&bt BT_CLR_ALL>;
+            label = "BT_RESET_ALL";
+        };
     };
 
     behaviors {
@@ -78,6 +90,30 @@
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
+
+        // Added 2026-09-23: 7-second-long-press Bluetooth full reset.
+        // Placed on layer_6 (reached by holding the right hand's bottom-right
+        // thumb key, &mo 6) at the position matching default_layer's row3
+        // right-end key (directly above the &mo 6 thumb key, easy to reach
+        // with the same hand while &mo 6 is held). A quick tap still falls
+        // through to whatever the base layer sends there (RETURN) via the
+        // &trans tap-binding; only holding it alone for 7+ seconds fires the
+        // hold-binding (the bt_reset_all macro -> &bt BT_CLR_ALL). Deliberately
+        // using "tap-preferred" flavor: this makes ZMK wait for the full
+        // tapping-term-ms (or an earlier release) before deciding, instead of
+        // resolving to "hold" the instant another key is pressed. That means
+        // an accidental brief overlap with another keypress can never trigger
+        // an early/unwanted Bluetooth reset - only a genuine, uninterrupted
+        // 7-second hold of this one key does.
+        bt_reset_hold: bt_reset_hold {
+            compatible = "zmk,behavior-hold-tap";
+            label = "BT_RESET_HOLD";
+            bindings = <&bt_reset_all>, <&trans>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <7000>;
+            flavor = "tap-preferred";
+        };
     };
 
     keymap {
@@ -88,17 +124,27 @@
         // previous sync: row3 left-6th/right-6th gained LeftShift/RightShift
         // (was transparent), row2 right-end became RETURN (was DEL), and the
         // thumb row was reorganized: left thumb is now Alt, LeftGUI, &mo1,
-        // GUI+LeftControl (verified via ZMK Studio's modifier picker - this is
-        // a real GUI+Ctrl combo, not a plain Ctrl), Space, Delete-Forward;
-        // right thumb is now Backspace, LeftControl, &mo6. Some behaviors that
-        // used to be hold-taps / layer-taps (e.g. "I", "Z", "SPACE") have been
-        // simplified to plain key presses in earlier syncs.
+        // LeftControl, Space, Delete-Forward; right thumb is now Backspace,
+        // LeftControl, &mo6. Some behaviors that used to be hold-taps /
+        // layer-taps (e.g. "I", "Z", "SPACE") have been simplified to plain
+        // key presses in earlier syncs.
+        //
+        // UPDATE 2026-09-23 (later same day): the left-thumb 4th key was
+        // GUI+LeftControl (LG(LCTRL)) on the live device - confirmed via ZMK
+        // Studio's modifier picker - not a plain Ctrl as it appeared. This was
+        // initially left as-is (confirmed intentional), but was then found to
+        // have a real-world side effect: pressing it with V sent Win+Ctrl+V,
+        // which on this user's PC opens the sound-output-device flyout instead
+        // of a normal paste. Per the user's decision, the GUI modifier has been
+        // removed here so this key is now plain LeftControl; the live device
+        // must be updated to match (either re-edited in ZMK Studio or picked up
+        // after the next firmware flash).
         default_layer {
             bindings = <
 &kp Q         &kp W         &kp E     &kp R    &kp T                          &kp Y         &kp U    &kp I    &kp O    &kp P
 &kp A         &kp S         &kp D     &kp F    &kp G        &mkp MB1                &kp LS(SLASH)  &kp H    &kp J    &kp K    &kp L    &kp RETURN
 &kp Z         &kp X         &kp C     &kp V    &kp B        &kp LEFT_SHIFT          &kp RIGHT_SHIFT &kp N    &kp M    &kp COMMA &kp DOT &kp RETURN
-&kp LEFT_ALT  &kp LEFT_GUI  &mo 1    &kp LG(LCTRL)  &kp SPACE    &kp DEL          &kp BACKSPACE &kp LCTRL                            &mo 6
+&kp LEFT_ALT  &kp LEFT_GUI  &mo 1    &kp LCTRL  &kp SPACE    &kp DEL          &kp BACKSPACE &kp LCTRL                            &mo 6
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
@@ -191,19 +237,26 @@
         // NOTE: BT profile selection (row 1) is unchanged from the template.
         // "R" and "Q" (row 2 left hand) are custom shortcuts unrelated to
         // Bluetooth (Ctrl+Shift+Alt+R and Ctrl+Win+Q) that were added here.
-        // The bootloader / BT_CLR / BT_CLR_ALL keys that used to live on the
-        // thumb row are gone - there is currently no keymap-based way to enter
-        // the bootloader or clear a Bluetooth profile; use the physical reset
-        // button / double-tap-reset instead.
+        // The bootloader entry key is still gone - there is no keymap-based
+        // way to enter the bootloader; use the physical reset button /
+        // double-tap-reset for that.
+        //
+        // UPDATE 2026-09-23: added a keymap-based Bluetooth full reset. Row3's
+        // right-end key (the position matching default_layer's second RETURN,
+        // directly above the &mo6 thumb key that reaches this layer) now runs
+        // bt_reset_hold instead of &trans: hold it alone for 7+ seconds while
+        // &mo6 is held to run "&bt BT_CLR_ALL" (clears ALL 5 Bluetooth profile
+        // bonds - full reset, not just the current profile, per user's choice).
+        // A normal quick tap still passes through to RETURN exactly as before
+        // (unchanged behavior for everyday use).
         layer_6 {
             bindings = <
 &trans  &trans                &trans        &trans        &trans                           &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
 &trans  &kp LC(LS(LA(R)))     &trans        &trans        &trans  &kp LC(LG(Q))       &trans        &trans        &trans        &trans        &trans        &trans
-&trans  &kp NUMBER_1          &kp NUMBER_2  &kp NUMBER_3  &trans  &trans              &trans        &trans        &trans        &trans        &trans        &trans
+&trans  &kp NUMBER_1          &kp NUMBER_2  &kp NUMBER_3  &trans  &trans              &trans        &trans        &trans        &trans        &trans        &bt_reset_hold 0 0
 &trans  &trans                &trans        &trans        &trans  &trans              &trans        &trans                                                    &trans
             >;
         };
     };
 };
-
 
