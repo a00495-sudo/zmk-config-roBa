@@ -34,29 +34,46 @@
     combos {
         compatible = "zmk,combos";
 
-        tab {
-            bindings = <&kp TAB>;
-            key-positions = <11 12>;
-        };
+        // NOTE 2026-10-07: All 5 combos that used to live here (tab,
+        // shift_tab, muhennkann, double_quotation, eq) were disabled at the
+        // user's request. Left commented out rather than deleted, in case
+        // any are wanted back later. Position reference (default_layer):
+        // A=10, S=11, D=12, F=13, L=20, right-row2-end RETURN=21, C=24, V=25.
+        //
+        // tab {
+        //     bindings = <&kp TAB>;
+        //     key-positions = <11 12>;
+        // };
+        //
+        // shift_tab {
+        //     bindings = <&kp LS(TAB)>;
+        //     key-positions = <12 13>;
+        // };
+        //
+        // muhennkann {
+        //     bindings = <&to_layer_0 INT_MUHENKAN>;
+        //     key-positions = <11 10>;
+        // };
+        //
+        // double_quotation {
+        //     bindings = <&kp DOUBLE_QUOTES>;
+        //     key-positions = <20 21>;
+        // };
+        //
+        // eq {
+        //     bindings = <&kp EQUAL>;
+        //     key-positions = <24 25>;
+        // };
 
-        shift_tab {
-            bindings = <&kp LS(TAB)>;
-            key-positions = <12 13>;
-        };
-
-        muhennkann {
-            bindings = <&to_layer_0 INT_MUHENKAN>;
-            key-positions = <11 10>;
-        };
-
-        double_quotation {
-            bindings = <&kp DOUBLE_QUOTES>;
-            key-positions = <20 21>;
-        };
-
-        eq {
-            bindings = <&kp EQUAL>;
-            key-positions = <24 25>;
+        // Added 2026-10-07: F+J together now send TILDE (Shift+Grave, ASCII
+        // "~"). Same idea as the left-thumb "-" fix from before: a plain
+        // half-width "~" is what most Japanese IMEs auto-convert to the
+        // full-width wave-dash character while composing, so this should
+        // produce that character directly. F = position 13 (left hand),
+        // J = position 18 (right hand) - the two home-row index-finger keys.
+        fj_tilde {
+            bindings = <&kp TILDE>;
+            key-positions = <13 18>;
         };
     };
 
