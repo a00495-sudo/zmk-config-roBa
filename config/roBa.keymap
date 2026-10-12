@@ -65,14 +65,19 @@
         //     key-positions = <24 25>;
         // };
 
-        // Added 2026-10-07: F+J together now send TILDE (Shift+Grave, ASCII
-        // "~"). Same idea as the left-thumb "-" fix from before: a plain
-        // half-width "~" is what most Japanese IMEs auto-convert to the
-        // full-width wave-dash character while composing, so this should
-        // produce that character directly. F = position 13 (left hand),
-        // J = position 18 (right hand) - the two home-row index-finger keys.
-        fj_tilde {
-            bindings = <&kp TILDE>;
+        // Added 2026-10-07, repurposed 2026-10-12: F+J together send GRAVE
+        // (Keyboard Grave Accent and Tilde) - this is the Japanese/English
+        // IME toggle key that used to live on FUNCTION layer's right-thumb
+        // middle position (see FUNCTION layer below, now reassigned to
+        // BT_SEL 3). Moved here at the user's request so the IME toggle is
+        // still reachable after that key became a Bluetooth profile select.
+        // (This combo originally sent TILDE "~" for 2026-10-07 through
+        // 2026-10-12; replaced, not kept alongside, since a single
+        // key-position pair can only drive one combo.) F = position 13
+        // (left hand), J = position 18 (right hand) - the two home-row
+        // index-finger keys.
+        fj_ime_toggle {
+            bindings = <&kp GRAVE>;
             key-positions = <13 18>;
         };
     };
@@ -191,12 +196,19 @@
         // right-click substitute. Symbol keys use the plain/unshifted US
         // keycode or ZMK's pre-shifted alias; JIS-layout correctness has not
         // been re-verified.
+        //
+        // UPDATE 2026-10-12: the right-thumb middle key (was &kp GRAVE, the
+        // Japanese/English IME toggle) now sends &bt BT_SEL 3 (Bluetooth
+        // profile 3) instead, at the user's request. The IME-toggle GRAVE
+        // keypress this key used to send was moved to a new F+J combo (see
+        // the fj_ime_toggle combo near the top of this file) so that
+        // function is still reachable.
         FUNCTION {
             bindings = <
 &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4     &kp NUMBER_5                            &kp LS(APOSTROPHE)  &kp SEMICOLON  &kp UP_ARROW    &kp BACKSLASH  &kp TAB
 &kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9     &kp NUMBER_0  &msc SCRL_UP                    &kp LG(LS(LEFT_BRACE))  &kp LG(MINUS)  &kp LEFT_ARROW  &kp DOWN_ARROW &kp RIGHT_ARROW &kp RETURN
 &kp LG(LS(NUMBER_8))  &kp LG(LS(NUMBER_9))  &kp LG(RIGHT_BRACE)  &kp LG(BACKSLASH)  &kp LG(HOME)  &msc SCRL_DOWN         &kp LG(RIGHT_SHIFT)  &kp LG(LS(MINUS))  &kp K_APPLICATION  &mkp MB2       &trans          &trans
-&kp F3        &kp LG(F5)    &trans           &kp LG(F12)    &kp END    &trans                          &kp LEFT_SHIFT      &kp GRAVE                                                     &trans
+&kp F3        &kp LG(F5)    &trans           &kp LG(F12)    &kp END    &trans                          &kp LEFT_SHIFT      &bt BT_SEL 3                                                     &trans
             >;
         };
 
