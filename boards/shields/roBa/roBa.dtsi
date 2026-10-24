@@ -92,6 +92,21 @@
                 , <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
                 , <&xiao_d 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
                 ;
+
+        // Added 2026-10-23: the user reported "e" occasionally registering
+        // 2-3 times from a single press - classic switch/contact chatter,
+        // where the debounce window is too short to fully absorb the
+        // mechanical bounce on make. Raised debounce-press-ms from ZMK's
+        // default (5ms) to 10ms to filter that out; debounce-release-ms is
+        // left at its 5ms default since release-side chatter (accidentally
+        // re-triggering on key-up) was not what was reported, and raising it
+        // too would start eating fast repeated taps of the same key. This is
+        // shared by both halves (roBa_L.overlay and roBa_R.overlay both
+        // include this file), so it affects every key on both sides, not
+        // just "e" - if chatter keeps happening after this, the next step is
+        // raising debounce-press-ms further (e.g. 15-20ms).
+        debounce-press-ms = <10>;
+        debounce-release-ms = <5>;
     };
 
     left_encoder: encoder_left {
