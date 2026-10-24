@@ -105,7 +105,7 @@
         // include this file), so it affects every key on both sides, not
         // just "e" - if chatter keeps happening after this, the next step is
         // raising debounce-press-ms further (e.g. 15-20ms).
-        debounce-press-ms = <10>;
+        debounce-press-ms = <15>;
         debounce-release-ms = <5>;
     };
 
