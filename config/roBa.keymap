@@ -206,9 +206,9 @@
         FUNCTION {
             bindings = <
 &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4     &kp NUMBER_5                            &kp LS(APOSTROPHE)  &kp SEMICOLON  &kp UP_ARROW    &kp BACKSLASH  &kp TAB
-&kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9     &kp NUMBER_0  &msc SCRL_UP                    &kp LS(LEFT_BRACE)  &kp LG(MINUS)  &kp LEFT_ARROW  &kp DOWN_ARROW &kp RIGHT_ARROW &kp RETURN
-&kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LG(RIGHT_BRACE)  &kp LG(BACKSLASH)  &kp LG(HOME)  &msc SCRL_DOWN         &kp LG(RIGHT_SHIFT)  &kp LG(LS(MINUS))  &kp K_APPLICATION  &mkp MB2       &trans          &trans
-&kp F3        &kp LG(F5)    &trans           &kp LG(F12)    &kp END    &trans                          &kp LEFT_SHIFT      &bt BT_SEL 3                                                     &trans
+&kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9     &kp NUMBER_0  &msc SCRL_UP                    &kp LS(LEFT_BRACE)  &kp MINUS  &kp LEFT_ARROW  &kp DOWN_ARROW &kp RIGHT_ARROW &kp RETURN
+&kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp RIGHT_BRACE  &kp BACKSLASH  &kp HOME  &msc SCRL_DOWN         &kp RIGHT_SHIFT  &kp LS(MINUS)  &kp K_APPLICATION  &mkp MB2       &trans          &trans
+&kp F3        &kp F5    &trans           &kp F12    &kp END    &trans                          &kp LEFT_SHIFT      &bt BT_SEL 3                                                     &trans
             >;
         };
 
